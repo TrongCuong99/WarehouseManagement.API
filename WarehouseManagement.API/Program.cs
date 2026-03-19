@@ -26,6 +26,10 @@ namespace WarehouseManagement.API
             var builder = WebApplication.CreateBuilder(args);
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new Exception("ConnectionString is not configured in appsettings.json!");
+            }
 
             if (builder.Environment.IsEnvironment("Testing"))
             {
