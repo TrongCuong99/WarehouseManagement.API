@@ -21,11 +21,6 @@ namespace WarehouseManagement.Infrastructure.Data.Configurations
             builder.HasMany(u => u.Warehouses)
                    .WithOne(w => w.User)
                    .HasForeignKey(w => w.UserId);
-            builder.HasMany(u => u.AuditLogs)
-                   .WithOne(a => a.User)
-                   .HasForeignKey(a => a.AuditLogId)
-
-                   .HasForeignKey(a => a.UserId);
             builder.HasMany(u => u.CreatedTransactions)
                    .WithOne(t => t.CreatedByUser)
                    .HasForeignKey(t => t.CreatedBy);

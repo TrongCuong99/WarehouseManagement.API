@@ -1,12 +1,6 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 using System.Net.Http.Json;
-using WarehouseManagement.Application.DTOs.Categories;
-using WarehouseManagement.Application.DTOs.Products;
-using WarehouseManagement.Application.DTOs.Supplier;
-using WarehouseManagement.Application.DTOs.Users;
-using WarehouseManagement.Application.DTOs.Warehouses;
 using WarehouseManagement.Application.DTOs.WarehouseTransactions;
 using WarehouseManagement.Application.Shared;
 using WarehouseManagement.Domain.Enums;
@@ -15,6 +9,7 @@ namespace InterationTest
 {
     public class TransactionsControllerTest(CustomWebApplicationFactory factory) : IntegrationTestBase(factory), IClassFixture<CustomWebApplicationFactory>
     {
+
         #region CreateTransaction Test
         [Fact]
         public async Task CreateTransaction_ShouldReturnsOk_WhenDataValid()
@@ -131,7 +126,7 @@ namespace InterationTest
 
             await create.RegisterUser("test@gmail.com", "Test@123");
             var userId = await create.LoginUser("test@gmail.com", "Test@123");
-            var createdWarehouse = await create.CreateWarehouse("Test Warehouse", "Test Location", 1000, userId!.Data!.Id);
+            await create.CreateWarehouse("Test Warehouse", "Test Location", 1000, userId!.Data!.Id);
             var categoriesResponse = await create.CreateCategory("Test Category", "This is a test category");
             var supplierResponse = await create.CreateSuplier("Test Supplier", "Test@gmail.com", "1234567890", "123 Test St");
             var response = await create.CreateProduct("Test Product", "This is a test product", 900, "TEST123", categoriesResponse!.Data!.Id, supplierResponse!.Data!.Id);
@@ -791,7 +786,7 @@ namespace InterationTest
                 ]
             };
             await Client.PostAsJsonAsync("api/transactions/create", transactiontest);
-            var createTransaction = await Client.PostAsJsonAsync("api/transactions/create", transactiondto);
+            await Client.PostAsJsonAsync("api/transactions/create", transactiondto);
 
             // Act
             var getalltrans = await Client.GetAsync($"api/transactions");
@@ -811,10 +806,10 @@ namespace InterationTest
 
             await create.RegisterUser("test@gmail.com", "Test@123");
             var userId = await create.LoginUser("test@gmail.com", "Test@123");
-            var createdWarehouse = await create.CreateWarehouse("Test Warehouse", "Test Location", 1000, userId!.Data!.Id);
+            await create.CreateWarehouse("Test Warehouse", "Test Location", 1000, userId!.Data!.Id);
             var categoriesResponse = await create.CreateCategory("Test Category", "This is a test category");
             var supplierResponse = await create.CreateSuplier("Test Supplier", "Test@gmail.com", "1234567890", "123 Test St");
-            var response = await create.CreateProduct("Test Product", "This is a test product", 900, "TEST123", categoriesResponse!.Data!.Id, supplierResponse!.Data!.Id);
+            await create.CreateProduct("Test Product", "This is a test product", 900, "TEST123", categoriesResponse!.Data!.Id, supplierResponse!.Data!.Id);
 
             // Act
             var getalltrans = await Client.GetAsync($"api/transactions");

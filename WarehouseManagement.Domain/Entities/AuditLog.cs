@@ -8,12 +8,13 @@ namespace WarehouseManagement.Domain.Entities
 {
     public class AuditLog
     {
-        public Guid AuditLogId { get; set; }
-        public string Action { get; set; } = string.Empty;
-        public DateTime DataBefore { get; set; }
-        public DateTime DataAfter { get; set; }
-        public Guid UserId { get; set; }
-        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
-        public User User { get; set; } = null!;
+        public int Id { get; set; }
+        public string? UserId { get; set; }
+        public string? Action { get; set; }
+        public string? TableName { get; set; }
+        public string? EntityId { get; set; }
+        public string? OldValues { get; set; }
+        public string? NewValues { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

@@ -14,7 +14,6 @@ namespace WarehouseManagement.Domain.Entities
         public DateTime? RefreshTokenExpiresAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<Warehouse> Warehouses { get; set; } = [];
-        public ICollection<AuditLog> AuditLogs { get; set; } = [];
         public ICollection<WarehouseTransaction> CreatedTransactions { get; set; } = [];
         public ICollection<WarehouseTransaction> ApprovedTransactions { get; set; } = [];
         private User() { }

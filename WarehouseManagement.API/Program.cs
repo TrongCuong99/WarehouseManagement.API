@@ -13,9 +13,16 @@ using WarehouseManagement.Application.Services;
 using WarehouseManagement.Application.Validators;
 using WarehouseManagement.Domain.Entities;
 using WarehouseManagement.Domain.Enums;
+using WarehouseManagement.Domain.Interfaces;
 using WarehouseManagement.Infrastructure.Data;
+using WarehouseManagement.Infrastructure.Data.Logging;
 using WarehouseManagement.Infrastructure.Repositories;
 using WarehouseManagement.Infrastructure.Security;
+using Serilog;
+using WarehouseManagement.Infrastructure.Logging;
+using AutoMapper;
+using WarehouseManagement.Application.Mapping;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WarehouseManagement.API
 {
@@ -25,6 +32,7 @@ namespace WarehouseManagement.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.ConfigureSerilog();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -74,7 +82,10 @@ namespace WarehouseManagement.API
             builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 
             // Add AutoMapper
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddMaps(typeof(ProductProfile).Assembly);
+            });
 
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -91,6 +102,10 @@ namespace WarehouseManagement.API
             builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
             builder.Services.AddFluentValidationAutoValidation();
+
+            builder.Services.AddScoped<IAuditLogger, EfAuditLogger>();
+
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddSwaggerGen(c =>
             {
