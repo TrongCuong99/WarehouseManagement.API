@@ -11,12 +11,12 @@ namespace WarehouseManagement.Application.Interfaces
     public interface ISupplierService
     {
         Task<SupplierDto> CreateAsync(CreateSupplierDto dto);
-        Task<SupplierDto> UpdateAsync(Guid supplierId, UpdateSupplierDto dto);
-        Task DeleteAsync(Guid supplierId);
-        Task<SupplierDto?> GetByIdAsync(Guid supplierId);
+        Task<SupplierDto> UpdateAsync(int supplierId, UpdateSupplierDto dto);
+        Task DeleteAsync(int supplierId);
+        Task<SupplierDto?> GetByIdAsync(int supplierId);
         Task<List<SupplierDto>> GetAllAsync();
-        Task AssignProductAsync(Guid supplierId, Guid productId);
-        Task RemoveProductAsync(Guid supplierId, Guid productId);
-        Task<IEnumerable<ProductSimpleDto>> GetProductsBySupplierAsync(Guid supplierId);
+        Task AssignProductAsync(int supplierId, int productId);
+        Task RemoveProductAsync(int supplierId, int productId);
+        Task<IEnumerable<ProductSimpleDto>> GetProductsBySupplierAsync(int supplierId);
     }
 }

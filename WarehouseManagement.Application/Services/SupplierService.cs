@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WarehouseManagement.Application.Common.Extensions;
 using WarehouseManagement.Application.DTOs.Products;
 using WarehouseManagement.Application.DTOs.Supplier;
 using WarehouseManagement.Application.Interfaces;
@@ -17,7 +13,7 @@ namespace WarehouseManagement.Application.Services
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
 
-        public async Task AssignProductAsync(Guid supplierId, Guid productId)
+        public async Task AssignProductAsync(int supplierId, int productId)
         {
             var supplier = await _unitOfWork.Supplier.GetByIdWithProductsAsync(supplierId)
                            ?? throw new KeyNotFoundException("Supplier not found.");
@@ -55,7 +51,7 @@ namespace WarehouseManagement.Application.Services
             return _mapper.Map<SupplierDto>(supplier);
         }
 
-        public async Task DeleteAsync(Guid supplierId)
+        public async Task DeleteAsync(int supplierId)
         {
             var supplier = await _unitOfWork.Supplier.GetByIdAsync(supplierId) ?? throw new KeyNotFoundException("Supplier not found.");
 
@@ -65,17 +61,18 @@ namespace WarehouseManagement.Application.Services
 
         public async Task<List<SupplierDto>> GetAllAsync()
         {
-            var suppliers = await _unitOfWork.Supplier.GetAllAsync();
-            return _mapper.Map<List<SupplierDto>>(suppliers);
+            var suppliers = _unitOfWork.Supplier.GetAllAsync();
+            var result = await suppliers.ToPagedListAsync(1, 10);
+            return _mapper.Map<List<SupplierDto>>(result);
         }
 
-        public async Task<SupplierDto?> GetByIdAsync(Guid supplierId)
+        public async Task<SupplierDto?> GetByIdAsync(int supplierId)
         {
             var supplier = await _unitOfWork.Supplier.GetByIdAsync(supplierId) ?? throw new KeyNotFoundException("Supplier with Id not found.");
             return _mapper.Map<SupplierDto>(supplier);
         }
 
-        public async Task<IEnumerable<ProductSimpleDto>> GetProductsBySupplierAsync(Guid supplierId)
+        public async Task<IEnumerable<ProductSimpleDto>> GetProductsBySupplierAsync(int supplierId)
         {
             var supplier = await _unitOfWork.Supplier.GetProductsBySupplierAsync(supplierId)
                             ?? throw new KeyNotFoundException("Supplier not found.");
@@ -87,7 +84,7 @@ namespace WarehouseManagement.Application.Services
                 });
         }
 
-        public async Task RemoveProductAsync(Guid supplierId, Guid productId)
+        public async Task RemoveProductAsync(int supplierId, int productId)
         {
             var supplier = await _unitOfWork.Supplier.GetByIdWithProductsAsync(supplierId) ?? throw new KeyNotFoundException("Supplier not found.");
 
@@ -100,7 +97,7 @@ namespace WarehouseManagement.Application.Services
             }
         }
 
-        public async Task<SupplierDto> UpdateAsync(Guid supplierId, UpdateSupplierDto dto)
+        public async Task<SupplierDto> UpdateAsync(int supplierId, UpdateSupplierDto dto)
         {
             var supplier = await _unitOfWork.Supplier.GetByIdAsync(supplierId) ?? throw new KeyNotFoundException("Supplier not found.");
 

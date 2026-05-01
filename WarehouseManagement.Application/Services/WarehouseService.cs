@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WarehouseManagement.Application.Common.Extensions;
 using WarehouseManagement.Application.Comom;
 using WarehouseManagement.Application.DTOs.Products;
 using WarehouseManagement.Application.DTOs.Warehouses;
@@ -34,20 +35,21 @@ namespace WarehouseManagement.Application.Services
             return _mapper.Map<WarehouseDto>(warehouse);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(int id)
         {
             var warehouse = await _unitOfWork.Warehouses.GetByIdAsync(id) ?? throw new KeyNotFoundException("Warehouse with ID does not exist");
             _unitOfWork.Warehouses.Delete(warehouse);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<WarehouseDto?>> GetAllAsync()
+        public async Task<IQueryable<WarehouseDto?>> GetAllAsync()
         {
-            var warehouses = await _unitOfWork.Warehouses.GetAllAsync() ?? throw new KeyNotFoundException("Warehouses does not exist");
-            return _mapper.Map<IEnumerable<WarehouseDto?>>(warehouses);
+            var warehouses = _unitOfWork.Warehouses.GetAllAsync() ?? throw new KeyNotFoundException("Warehouses does not exist");
+            var result = await warehouses.ToPagedListAsync(1, 10);
+            return _mapper.Map<IQueryable<WarehouseDto?>>(result);
         }
 
-        public async Task<WarehouseDto?> GetByIdAsync(Guid id)
+        public async Task<WarehouseDto?> GetByIdAsync(int id)
         {
             var warehouse = await _unitOfWork.Warehouses.GetByIdAsync(id);
             if (warehouse != null)
@@ -57,7 +59,7 @@ namespace WarehouseManagement.Application.Services
             throw new KeyNotFoundException("Warehouse with ID does not exist");
         }
 
-        public async Task<WarehouseDto> UpdateAsync(Guid id, UpdateWarehouseDto dto)
+        public async Task<WarehouseDto> UpdateAsync(int id, UpdateWarehouseDto dto)
         {
             var warehouse = await _unitOfWork.Warehouses.GetByIdAsync(id) ?? throw new KeyNotFoundException("Warehouse not found");
 
@@ -77,12 +79,19 @@ namespace WarehouseManagement.Application.Services
                 warehouse.Capacity = dto.Capacity;
 
             var userExist = await _unitOfWork.User.GetByIdAsync(dto.UserId);
-            if (dto.UserId != Guid.Empty)
+            if (dto.UserId == 0)
             {
-                if (userExist == null)
-                    throw new KeyNotFoundException("User with ID does not exist");
-                else
-                    warehouse.UserId = dto.UserId;
+                warehouse.UserId = warehouse.UserId;
+            }
+            else if (dto.UserId > 0)
+            {
+                if(userExist == null)
+                throw new KeyNotFoundException("User with ID does not exist");
+                warehouse.UserId = dto.UserId;
+            }
+            else
+            {
+                throw new KeyNotFoundException("UserId must be greater than zero");
             }
 
             await _unitOfWork.SaveChangesAsync();

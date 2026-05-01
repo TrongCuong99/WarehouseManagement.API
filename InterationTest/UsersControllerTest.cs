@@ -3,6 +3,7 @@ using System.Net;
 using WarehouseManagement.Application.DTOs.Users;
 using FluentAssertions;
 using WarehouseManagement.Application.Shared;
+using Moq;
 
 namespace InterationTest
 {
@@ -789,7 +790,7 @@ namespace InterationTest
 
             var dto = new RefreshTokenRequestDto
             {
-                UserId = Guid.NewGuid(),
+                UserId = It.IsAny<int>(),
                 RefreshToken = "invalid_refresh_token"
             };
 

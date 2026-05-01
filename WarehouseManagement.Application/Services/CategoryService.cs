@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WarehouseManagement.Application.Common.Extensions;
 using WarehouseManagement.Application.Comom;
 using WarehouseManagement.Application.DTOs.Categories;
 using WarehouseManagement.Application.Interfaces;
+using WarehouseManagement.Application.Shared;
 using WarehouseManagement.Domain.Entities;
 using static WarehouseManagement.Domain.Common.DomainException;
 
@@ -32,26 +34,27 @@ namespace WarehouseManagement.Application.Services
             return _mapper.Map<CategoryDto>(category);
         }
 
-        public async Task DeleteCategoryAsync(Guid id)
+        public async Task DeleteCategoryAsync(int id)
         {
             var category = await _unitOfWork.Categories.GetByIdAsync(id) ?? throw new KeyNotFoundException("Category not found");
             _unitOfWork.Categories.Delete(category);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<CategoryDto?>> GetAllCategoriesAsync()
+        public async Task<IQueryable<CategoryDto?>> GetAllCategoriesAsync()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync();
-            return _mapper.Map<IEnumerable<CategoryDto?>>(categories);
+            var categories = _unitOfWork.Categories.GetAllAsync();
+            var result = await categories.ToPagedListAsync(1, 10);
+            return _mapper.Map<IQueryable<CategoryDto?>>(result);
         }
 
-        public async Task<CategoryDto?> GetCategoryByIdAsync(Guid id)
+        public async Task<CategoryDto?> GetCategoryByIdAsync(int id)
         {
             var category = await _unitOfWork.Categories.GetByIdAsync(id) ?? throw new KeyNotFoundException("Category with ID not exist");
             return _mapper.Map<CategoryDto>(category);
         }
 
-        public async Task<CategoryDto> UpdateCategoryAsync(Guid id, UpdateCategoryDto dto)
+        public async Task<CategoryDto> UpdateCategoryAsync(int id, UpdateCategoryDto dto)
         {
             var category = _unitOfWork.Categories.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("Category with ID not exist");
 

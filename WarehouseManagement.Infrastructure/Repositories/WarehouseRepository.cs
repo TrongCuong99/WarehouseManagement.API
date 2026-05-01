@@ -18,12 +18,12 @@ namespace WarehouseManagement.Infrastructure.Repositories
             return await _dbSet.FirstOrDefaultAsync(w => w.Name == name);
         }
 
-        public async Task<bool> ExistsByIdAsync(Guid warehouseId)
+        public async Task<bool> ExistsByIdAsync(int warehouseId)
         {
             return await _dbSet.AnyAsync(w => w.Id == warehouseId);
         }
 
-        public async Task<IEnumerable<Product>> GetProductsInWarehouseAsync(Guid warehouseId)
+        public async Task<IEnumerable<Product>> GetProductsInWarehouseAsync(int warehouseId)
         {
             return await WarehouseContext.Stocks!
                 .Where(s => s.WarehouseId == warehouseId)
@@ -32,14 +32,14 @@ namespace WarehouseManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<int> GetTotalStockQuantityAsync(Guid warehouseId)
+        public async Task<int> GetTotalStockQuantityAsync(int warehouseId)
         {
             return await WarehouseContext.Stocks!
                 .Where(s => s.WarehouseId == warehouseId)
                 .SumAsync(s => s.QuantityOnHand);
         }
 
-        public async Task<bool> HasProductsAsync(Guid warehouseId)
+        public async Task<bool> HasProductsAsync(int warehouseId)
         {
             return await WarehouseContext.Stocks!
                 .AnyAsync(s => s.WarehouseId == warehouseId && s.QuantityOnHand > 0);

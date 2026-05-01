@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using StructureMap;
+using WarehouseManagement.Application.Common.Extensions;
 using WarehouseManagement.Application.Comom;
 using WarehouseManagement.Application.DTOs.Products;
 using WarehouseManagement.Application.Interfaces;
+using WarehouseManagement.Application.Shared;
 using WarehouseManagement.Domain.Entities;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static WarehouseManagement.Domain.Common.DomainException;
 
 namespace WarehouseManagement.Application.Services
@@ -40,6 +44,8 @@ namespace WarehouseManagement.Application.Services
 
             product.Categories.Add(category);
 
+            await _unitOfWork.SaveChangesAsync();
+
             var productSupplier = new ProductSupplier(
                 productId: product.Id,
                 supplierId: dto.SupplierId,
@@ -51,19 +57,21 @@ namespace WarehouseManagement.Application.Services
             return _mapper.Map<ProductDto>(product);
         }
 
-        public async Task<ProductDto?> GetProductByIdAsync(Guid id)
+        public async Task<ProductDto?> GetProductByIdAsync(int id)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(id) ?? throw new KeyNotFoundException("Product with ID not exist");
             return _mapper.Map<ProductDto>(product);
         }
 
-        public async Task<IEnumerable<ProductDto?>> GetAllProductsAsync()
+        public async Task<PagedResult<ProductDto?>> GetAllProductsAsync()
         {
-            var products = await _unitOfWork.Products.GetAllAsync(p => p.Categories);
-            return _mapper.Map<IEnumerable<ProductDto?>>(products);
+            var products =  _unitOfWork.Products.GetAllAsync(p => p.Categories);
+            var dtoQuery = products.ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
+            var result = await dtoQuery.ToPagedListAsync(1, 10);
+            return result!;
         }
 
-        public async Task<ProductDto> UpdateProductAsync(Guid id, UpdateProductDto dto)
+        public async Task<ProductDto> UpdateProductAsync(int id, UpdateProductDto dto)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(id) ?? throw new KeyNotFoundException("Product with ID not exist");
 
@@ -83,7 +91,7 @@ namespace WarehouseManagement.Application.Services
             return _mapper.Map<ProductDto>(product);
         }
 
-        public async Task DeleteProductAsync(Guid id)
+        public async Task DeleteProductAsync(int id)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(id) ?? throw new KeyNotFoundException("Product with ID not exist");
             _unitOfWork.Products.Delete(product);

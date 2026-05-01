@@ -34,32 +34,32 @@ namespace WarehouseManagement.API.Controllers
         }
         
         [Authorize(Roles = "Admin")]
-        [HttpPost("assign-role/{id:guid}")]
-        public async Task<IActionResult> AssignRole(Guid id, string role)
+        [HttpPost("assign-role/{id:int}")]
+        public async Task<IActionResult> AssignRole(int id, string role)
         {
             await _service.AssignRoleAsync(id, role);
             return Ok(new ApiResponse<string>(200, "Role assigned successfully"));
         }
 
         [Authorize]
-        [HttpPost("update/{id:guid}")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserDto dto, [FromServices] ICurrentUserService currentUserService)
+        [HttpPost("update/{id:int}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto dto, [FromServices] ICurrentUserService currentUserService)
         {
             var userDto = await _service.UpdateUserAsync(id, dto, currentUserService);
             return Ok(new ApiResponse<UserDto?>(200, "Update User Successfully", userDto));
         }
 
         [Authorize]
-        [HttpPost("changepassword/{id:guid}")]
-        public async Task<IActionResult> ChangePassword(Guid id, [FromBody] ChangePasswordDto dto, [FromServices] ICurrentUserService currentUserService)
+        [HttpPost("changepassword/{id:int}")]
+        public async Task<IActionResult> ChangePassword(int id, [FromBody] ChangePasswordDto dto, [FromServices] ICurrentUserService currentUserService)
         {
             var userDto = await _service.ChangPassword(id, dto, currentUserService);
             return Ok(new ApiResponse<UserDto?>(200, "Get User by Id Successfully", userDto));
         }
 
         [Authorize]
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetUserById(Guid id, [FromServices] ICurrentUserService currentUserService)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetUserById(int id, [FromServices] ICurrentUserService currentUserService)
         {
             var userDto = await _service.GetUserByIdAsync(id, currentUserService);
             if (userDto == null)
@@ -78,8 +78,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteUser(int id)
         {
             await _service.DeleteUserAsync(id);
             return Ok(new ApiResponse<string>(200, "Delete User Successfully"));

@@ -9,18 +9,18 @@ namespace WarehouseManagement.Domain.Entities
 {
     public class ProductSupplier : BaseEntity
     {
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
         public Product Product { get; set; } = null!;
-        public Guid SupplierId { get; set; }
+        public int SupplierId { get; set; }
         public Supplier Supplier { get; set; } = null!;
         public decimal SupplyPrice { get; set; }
         private ProductSupplier() { }
 
-        public ProductSupplier(Guid productId, Guid supplierId, decimal supplyPrice)
+        public ProductSupplier(int productId, int supplierId, decimal supplyPrice)
         {
-            if (productId == Guid.Empty)
+            if (productId <= 0)
                 throw new DomainException("Invalid product ID.");
-            if (supplierId == Guid.Empty)
+            if (supplierId <= 0)
                 throw new DomainException("Invalid supplier ID.");
             if (supplyPrice < 0)
                 throw new DomainException("Supply price cannot be negative.");

@@ -12,9 +12,9 @@ namespace WarehouseManagement.Application.Interfaces
     public interface IProductService
     {
         Task<ProductDto> CreateProductAsync(CreateProductDto dto);
-        Task<ProductDto?> GetProductByIdAsync(Guid id);
-        Task<IEnumerable<ProductDto?>> GetAllProductsAsync();
-        Task<ProductDto> UpdateProductAsync(Guid id, UpdateProductDto dto);
-        Task DeleteProductAsync(Guid id);
+        Task<ProductDto?> GetProductByIdAsync(int id);
+        Task<PagedResult<ProductDto?>> GetAllProductsAsync();
+        Task<ProductDto> UpdateProductAsync(int id, UpdateProductDto dto);
+        Task DeleteProductAsync(int id);
     }
 }

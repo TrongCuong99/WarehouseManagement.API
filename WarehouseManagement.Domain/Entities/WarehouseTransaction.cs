@@ -9,12 +9,12 @@ namespace WarehouseManagement.Domain.Entities
         public TransactionTypes TransactionType { get; set; }
         public DateTime TransactionDate { get; set; } = DateTime.UtcNow;
         public string ReferenceNumber { get; set; } = string.Empty;
-        public Guid WarehouseId { get; set; }
+        public int WarehouseId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdateAt { get; set; } = DateTime.UtcNow;
-        public Guid CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
         public User CreatedByUser { get; set; } = null!;
-        public Guid? ApprovedBy { get; set; }
+        public int? ApprovedBy { get; set; }
         public User? ApprovedByUser { get; set; }
         public string Status { get; private set; } = "Pending"; // Pending / Approved / Rejected
         public string? RejectionReason { get; private set; }
@@ -23,15 +23,15 @@ namespace WarehouseManagement.Domain.Entities
 
         public WarehouseTransaction(
             TransactionTypes transactionType,
-            Guid warehouseId,
-            Guid createdBy,
+            int warehouseId,
+            int createdBy,
             string status,
             string referenceNumber)
         {
             SetTransactionType(transactionType);
-            if (warehouseId == Guid.Empty)
+            if (warehouseId <= 0)
                 throw new DomainException("Warehouse is required.");
-            if (createdBy == Guid.Empty)
+            if (createdBy <= 0)
                 throw new DomainException("CreatedBy is required.");
             if (string.IsNullOrWhiteSpace(referenceNumber))
                 throw new DomainException("Reference number is required.");
@@ -56,7 +56,7 @@ namespace WarehouseManagement.Domain.Entities
             TransactionType = type;
         }
 
-        public void Approve(Guid? approvedBy)
+        public void Approve(int? approvedBy)
         {
             if (Status == TransactionTypes.Approved.ToString())
                 throw new DomainException("Transaction already approved.");

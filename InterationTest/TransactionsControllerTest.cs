@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Moq;
 using System.Net;
 using System.Net.Http.Json;
 using WarehouseManagement.Application.DTOs.WarehouseTransactions;
@@ -135,7 +136,7 @@ namespace InterationTest
             var transactiondto = new CreateWarehouseTransactionDto
             {
                 TransactionType = TransactionTypes.Inbound,
-                WarehouseId = Guid.NewGuid(),
+                WarehouseId = It.IsAny<int>(),
                 ReferenceNumber = "TestRef",
                 CreatedBy = userId!.Data!.Id,
                 Status = "Pending",
@@ -188,7 +189,7 @@ namespace InterationTest
                         UnitPrice = 100
                     },
                     new() {
-                        ProductId = Guid.NewGuid(),
+                        ProductId = It.IsAny<int>(),
                         Quantity = 20,
                         UnitPrice = 100
                     }
@@ -270,7 +271,7 @@ namespace InterationTest
                 TransactionType = TransactionTypes.Inbound,
                 WarehouseId = createdWarehouse!.Data!.Id,
                 ReferenceNumber = "TestRef",
-                CreatedBy = Guid.NewGuid(),
+                CreatedBy = It.IsAny<int>(),
                 Status = "Pending",
                 TransactionDetails =
                 [
@@ -313,7 +314,7 @@ namespace InterationTest
                 TransactionType = TransactionTypes.Inbound,
                 WarehouseId = createdWarehouse!.Data!.Id,
                 ReferenceNumber = "TestRef",
-                CreatedBy = Guid.NewGuid(),
+                CreatedBy = It.IsAny<int>(),
                 Status = "Pending",
                 TransactionDetails =
                 [
@@ -355,7 +356,7 @@ namespace InterationTest
                 TransactionType = TransactionTypes.Inbound,
                 WarehouseId = createdWarehouse!.Data!.Id,
                 ReferenceNumber = "TestRef",
-                CreatedBy = Guid.NewGuid(),
+                CreatedBy = It.IsAny<int>(),
                 Status = "Pending",
                 TransactionDetails =
                 [
@@ -1240,7 +1241,7 @@ namespace InterationTest
 
             var updatetransactiondto = new UpdateWarehouseTransactionDto
             {
-                WarehouseId = Guid.NewGuid(),
+                WarehouseId = 0,
                 ReferenceNumber = "TestUpdate",
                 Status = "Approved",
             };
@@ -1296,7 +1297,7 @@ namespace InterationTest
 
             var updatetransactiondto = new UpdateWarehouseTransactionDto
             {
-                WarehouseId = Guid.NewGuid(),
+                WarehouseId = 0,
                 ReferenceNumber = "TestUpdate",
                 Status = "Approved",
             };
@@ -1347,7 +1348,7 @@ namespace InterationTest
 
             var updatetransactiondto = new UpdateWarehouseTransactionDto
             {
-                WarehouseId = Guid.NewGuid(),
+                WarehouseId = 0,
                 ReferenceNumber = "TestUpdate",
                 Status = "Approved",
             };
@@ -1401,7 +1402,7 @@ namespace InterationTest
 
             var updatetransactiondto = new UpdateWarehouseTransactionDto
             {
-                WarehouseId = Guid.NewGuid(),
+                WarehouseId = 0,
                 ReferenceNumber = "TestUpdate",
                 Status = "Approved",
             };

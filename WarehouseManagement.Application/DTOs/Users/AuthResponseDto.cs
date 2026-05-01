@@ -17,7 +17,7 @@ namespace WarehouseManagement.Application.DTOs.Users
         public DateTime RefreshTokenExpiresAt { get; set; }
 
         // User info
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Email { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
     }

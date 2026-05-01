@@ -38,7 +38,7 @@ namespace InterationTest
             return token!;
         }
 
-        public async Task<ApiResponse<WarehouseDto>> CreateWarehouse(string Name, string Location, int Capacity, Guid UserId)
+        public async Task<ApiResponse<WarehouseDto>> CreateWarehouse(string Name, string Location, int Capacity, int UserId)
         {
             Authenticate("Admin");
             var warehouse = new CreateWarehouseDto
@@ -82,7 +82,7 @@ namespace InterationTest
             return supplierResponse!;
         }
 
-        public async Task<ApiResponse<ProductDto>> CreateProduct(string Name, string Description, decimal Price, string Sku, Guid CategoryId, Guid SupplierId)
+        public async Task<ApiResponse<ProductDto>> CreateProduct(string Name, string Description, decimal Price, string Sku, int CategoryId, int SupplierId)
         {
             var dto = new CreateProductDto
             {

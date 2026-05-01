@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using WarehouseManagement.Application.Common.Extensions;
 using WarehouseManagement.Application.Comom;
 using WarehouseManagement.Application.DTOs.Products;
 using WarehouseManagement.Application.Interfaces;
@@ -18,11 +19,11 @@ namespace WarehouseManagement.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var products = await _productService.GetAllProductsAsync();
-            return Ok(new ApiResponse<IEnumerable<ProductDto?>>(200, "Get All Products Successfully", products));
+            return Ok(new ApiResponse<PagedResult<ProductDto?>>(200, "Get All Products Successfully", products));
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);
             if (product == null)
@@ -45,8 +46,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductDto dto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateProductDto dto)
         {
             var product = await _productService.UpdateProductAsync(id, dto);
             if (product == null)
@@ -57,8 +58,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             await _productService.DeleteProductAsync(id);
             return Ok(new ApiResponse<ProductDto>(200, "Delete Product Successfully"));

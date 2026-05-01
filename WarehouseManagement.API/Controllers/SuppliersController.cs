@@ -21,8 +21,8 @@ namespace WarehouseManagement.API.Controllers
             return new ApiResponse<List<SupplierDto>>(200, "Get Suppliers Succesful", suppliers);
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
         {
             var supplier = await _service.GetByIdAsync(id);
             if (supplier != null)
@@ -51,8 +51,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, UpdateSupplierDto dto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, UpdateSupplierDto dto)
         {
             var updatedSupplier = await _service.UpdateAsync(id, dto);
             if (updatedSupplier != null)
@@ -65,8 +65,8 @@ namespace WarehouseManagement.API.Controllers
             }
         }
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
             return Ok(new ApiResponse<SupplierDto>(200, "Delete Supplier Successful"));

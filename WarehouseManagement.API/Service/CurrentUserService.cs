@@ -8,10 +8,10 @@ namespace WarehouseManagement.API.Service
         private readonly IHttpContextAccessor _httpContextAccessor = accessor;
 
         
-        public Guid? UserId => Guid.TryParse(_httpContextAccessor.HttpContext?
+        public int? UserId => int.TryParse(_httpContextAccessor.HttpContext?
                 .User?
                 .FindFirstValue(ClaimTypes.NameIdentifier), out var id)
-                ? id : Guid.Empty;
+                ? id : 0;
 
         public string? Email =>_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
 

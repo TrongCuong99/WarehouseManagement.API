@@ -11,8 +11,8 @@ namespace WarehouseManagement.Application.DTOs.Products
         public string SKU { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
-        public Guid CategoryId { get; set; }
-        public Guid SupplierId { get; set; }
+        public int CategoryId { get; set; }
+        public int SupplierId { get; set; }
         public decimal Price { get; set; }
     }
 }

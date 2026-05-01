@@ -13,20 +13,20 @@ namespace WarehouseManagement.Infrastructure.Repositories
     public class StockRepository(WarehouseDbContext context) : BaseRepository<Stock>(context), IStockRepository
     {
 
-        public async Task<IEnumerable<Stock>> GetStocksByProductAsync(Guid productId)
+        public async Task<IEnumerable<Stock>> GetStocksByProductAsync(int productId)
         {
             return await _dbSet.Where(p => p.ProductId == productId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Stock>> GetStocksByWarehouseAsync(Guid warehouseId)
+        public async Task<IEnumerable<Stock>> GetStocksByWarehouseAsync(int warehouseId)
         {
             return await _dbSet.Where(w => w.WarehouseId == warehouseId).ToListAsync();
         }
-        public async Task<Stock?> GetStockByStockId(Guid stockId)
+        public async Task<Stock?> GetStockByStockId(int stockId)
         {
             return await _dbSet.FirstOrDefaultAsync(s => s.Id == stockId);
         }
-        public async Task<Stock?> GetStockByProductAndWarehouseAsync(Guid productId, Guid warehouseId)
+        public async Task<Stock?> GetStockByProductAndWarehouseAsync(int productId, int warehouseId)
         {
             return await _dbSet.FirstOrDefaultAsync(s => s.ProductId == productId && s.WarehouseId == warehouseId);
         }

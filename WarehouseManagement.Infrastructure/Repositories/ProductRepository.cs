@@ -22,7 +22,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
             return await _dbSet.Where(p => p.Name.Contains(keyword) || p.SKU.Contains(keyword)).ToListAsync();
         }
 
-        public async Task<List<Product>> GetByIdsAsync(IEnumerable<Guid> productIds)
+        public async Task<List<Product>> GetByIdsAsync(IEnumerable<int> productIds)
         {
             return await _dbSet.Where(p => productIds.Contains(p.Id)).ToListAsync();
         }

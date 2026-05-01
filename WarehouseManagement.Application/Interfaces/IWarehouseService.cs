@@ -13,9 +13,9 @@ namespace WarehouseManagement.Application.Interfaces
     public interface IWarehouseService
     {
         Task<WarehouseDto> CreateAsync(CreateWarehouseDto dto);
-        Task<IEnumerable<WarehouseDto?>> GetAllAsync();
-        Task<WarehouseDto?> GetByIdAsync(Guid id);
-        Task<WarehouseDto> UpdateAsync(Guid id, UpdateWarehouseDto dto);
-        Task DeleteAsync(Guid id);
+        Task<IQueryable<WarehouseDto?>> GetAllAsync();
+        Task<WarehouseDto?> GetByIdAsync(int id);
+        Task<WarehouseDto> UpdateAsync(int id, UpdateWarehouseDto dto);
+        Task DeleteAsync(int id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WarehouseManagement.Application.Common.Extensions;
 using WarehouseManagement.Application.Comom;
 using WarehouseManagement.Application.DTOs.WarehouseTransactions;
 using WarehouseManagement.Application.Interfaces;
@@ -57,7 +58,7 @@ namespace WarehouseManagement.Application.Services
             return _mapper.Map<WarehouseTransactionDto>(transaction);
         }
 
-        public async Task<WarehouseTransactionDto> ApproveTransactionAsync(Guid transactionId, ICurrentUserService currentUserService)
+        public async Task<WarehouseTransactionDto> ApproveTransactionAsync(int transactionId, ICurrentUserService currentUserService)
         {
             var transaction = await _unitOfWork.WarehouseTransactions.GetByIdAsync(transactionId, t => t.TransactionDetails)
                 ?? throw new KeyNotFoundException("Transaction not found");
@@ -78,7 +79,7 @@ namespace WarehouseManagement.Application.Services
             return _mapper.Map<WarehouseTransactionDto>(transaction);
         }
 
-        public async Task<WarehouseTransactionDto> RejectTransactionAsync(Guid transactionId, string reason)
+        public async Task<WarehouseTransactionDto> RejectTransactionAsync(int transactionId, string reason)
         {
             var transaction = await _unitOfWork.WarehouseTransactions.GetByIdAsync(transactionId)
                 ?? throw new KeyNotFoundException("Transaction not found");
@@ -89,20 +90,21 @@ namespace WarehouseManagement.Application.Services
             return _mapper.Map<WarehouseTransactionDto>(transaction);
         }
 
-        public async Task<IEnumerable<WarehouseTransactionDto>> GetAllTransactionsAsync()
+        public async Task<IQueryable<WarehouseTransactionDto>> GetAllTransactionsAsync()
         {
-            var list = await _unitOfWork.WarehouseTransactions.GetAllAsync();
-            return _mapper.Map<IEnumerable<WarehouseTransactionDto>>(list);
+            var list = _unitOfWork.WarehouseTransactions.GetAllAsync();
+            var result = await list.ToPagedListAsync(1, 10);
+            return _mapper.Map<IQueryable<WarehouseTransactionDto>>(result);
         }
 
-        public async Task<WarehouseTransactionDto> GetTransactionByIdAsync(Guid transactionId)
+        public async Task<WarehouseTransactionDto> GetTransactionByIdAsync(int transactionId)
         {
             var transaction = await _unitOfWork.WarehouseTransactions.GetByIdAsync(transactionId)
                 ?? throw new KeyNotFoundException("Transaction not found");
             return _mapper.Map<WarehouseTransactionDto>(transaction);
         }
 
-        public async Task DeleteTransactionAsync(Guid transactionId)
+        public async Task DeleteTransactionAsync(int transactionId)
         {
             var transaction = await _unitOfWork.WarehouseTransactions.GetByIdAsync(transactionId)
                 ?? throw new KeyNotFoundException("Transaction not found");
@@ -110,7 +112,7 @@ namespace WarehouseManagement.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<WarehouseTransactionDto> UpdateTransactionAsync(Guid id, UpdateWarehouseTransactionDto dto, ICurrentUserService currentUserService)
+        public async Task<WarehouseTransactionDto> UpdateTransactionAsync(int id, UpdateWarehouseTransactionDto dto, ICurrentUserService currentUserService)
         {
             var warehouseTransaction = await _unitOfWork.WarehouseTransactions.GetByIdAsync(id) ?? throw new KeyNotFoundException("Warehouse Transaction not found.");
             if (!string.IsNullOrWhiteSpace(dto.Status))
@@ -134,7 +136,7 @@ namespace WarehouseManagement.Application.Services
             }
             if (dto.WarehouseId != null)
             {
-                warehouseTransaction.WarehouseId = (Guid)dto.WarehouseId!;
+                warehouseTransaction.WarehouseId = (int)dto.WarehouseId;
             }
             await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<WarehouseTransactionDto>(warehouseTransaction);

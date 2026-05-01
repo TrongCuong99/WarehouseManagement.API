@@ -8,7 +8,7 @@ namespace WarehouseManagement.Application.Interfaces
 {
     public interface IJwtService
     {
-        public (string, DateTime) GenerateToken(Guid userId, string email, string role);
+        public (string, DateTime) GenerateToken(int userId, string email, string role);
         public string GenerateRefreshToken();
     }
 }

@@ -8,7 +8,7 @@ namespace WarehouseManagement.Application.DTOs.Users
 {
     public class RefreshTokenRequestDto
     {
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
         public string RefreshToken { get; set; } = string.Empty;
     }
 }

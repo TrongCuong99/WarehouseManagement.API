@@ -10,7 +10,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
     public class WarehouseTransactionRepository(WarehouseDbContext context) :
         BaseRepository<WarehouseTransaction>(context), IWarehouseTransactionRepository
     {
-        public async Task ApproveTransactionAsync(Guid transactionId, Guid approvedByUserId)
+        public async Task ApproveTransactionAsync(int transactionId, int approvedByUserId)
         {
             var transaction = await _dbSet.FindAsync(transactionId) ?? throw new KeyNotFoundException("Transaction not found.");
             transaction.Approve(approvedByUserId);
@@ -33,21 +33,21 @@ namespace WarehouseManagement.Infrastructure.Repositories
             return await _dbSet.FirstOrDefaultAsync(t => t.ReferenceNumber == referenceNumber);
         }
 
-        public async Task<IEnumerable<WarehouseTransaction>> GetByUserAsync(Guid userId)
+        public async Task<IEnumerable<WarehouseTransaction>> GetByUserAsync(int userId)
         {
             return await _dbSet
                 .Where(t => t.CreatedBy == userId)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<WarehouseTransaction>> GetByWarehouseAsync(Guid warehouseId)
+        public async Task<IEnumerable<WarehouseTransaction>> GetByWarehouseAsync(int warehouseId)
         {
             return await _dbSet
                 .Where(t => t.WarehouseId == warehouseId)
                 .ToListAsync();
         }
 
-        public async Task<decimal> GetTotalExportValueAsync(Guid warehouseId, DateTime from, DateTime to)
+        public async Task<decimal> GetTotalExportValueAsync(int warehouseId, DateTime from, DateTime to)
         {
             return await _dbSet
                 .Where(t => t.WarehouseId == warehouseId
@@ -58,7 +58,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
                 .SumAsync(d => d.Quantity * d.UnitPrice);
         }
 
-        public async Task<decimal> GetTotalImportValueAsync(Guid warehouseId, DateTime from, DateTime to)
+        public async Task<decimal> GetTotalImportValueAsync(int warehouseId, DateTime from, DateTime to)
         {
             return await _dbSet
                 .Where(t => t.WarehouseId == warehouseId
@@ -69,14 +69,14 @@ namespace WarehouseManagement.Infrastructure.Repositories
                 .SumAsync(d => d.Quantity * d.UnitPrice);
         }
 
-        public async Task<WarehouseTransaction?> GetTransactionWithDetailsAsync(Guid transactionId)
+        public async Task<WarehouseTransaction?> GetTransactionWithDetailsAsync(int transactionId)
         {
             return await _dbSet
                 .Include(t => t.TransactionDetails)
                 .FirstOrDefaultAsync(t => t.Id == transactionId);
         }
 
-        public async Task RejectTransactionAsync(Guid transactionId, string reason)
+        public async Task RejectTransactionAsync(int transactionId, string reason)
         {
             var transaction = await _dbSet.FindAsync(transactionId) ?? throw new KeyNotFoundException("Transaction not found.");
             transaction.Rejected(reason);

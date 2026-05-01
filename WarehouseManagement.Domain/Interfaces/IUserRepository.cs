@@ -6,10 +6,10 @@ namespace WarehouseManagement.Domain.Interfaces
     {
         Task<bool> ExistsByUsernameAsync(string username);
         Task<IEnumerable<User>> GetByRoleAsync(string role);
-        Task<IEnumerable<Warehouse>> GetWarehousesByUserAsync(Guid userId);
-        Task<IEnumerable<WarehouseTransaction>> GetCreatedTransactionsAsync(Guid userId);
-        Task<IEnumerable<WarehouseTransaction>> GetApprovedTransactionsAsync(Guid userId);
-        Task<bool> HasApprovedTransactionsAsync(Guid userId);
+        Task<IEnumerable<Warehouse>> GetWarehousesByUserAsync(int userId);
+        Task<IEnumerable<WarehouseTransaction>> GetCreatedTransactionsAsync(int userId);
+        Task<IEnumerable<WarehouseTransaction>> GetApprovedTransactionsAsync(int userId);
+        Task<bool> HasApprovedTransactionsAsync(int userId);
         Task<User?> GetUserByEmailAsync(string email);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using StructureMap;
+using WarehouseManagement.Application.Common.Extensions;
 using WarehouseManagement.Application.Comom;
 using WarehouseManagement.Application.DTOs.Users;
 using WarehouseManagement.Application.Interfaces;
+using WarehouseManagement.Application.Shared;
 using WarehouseManagement.Domain.Entities;
 using static WarehouseManagement.Domain.Common.DomainException;
 
@@ -55,7 +57,7 @@ namespace WarehouseManagement.Application.Services
             };
         }
 
-        public async Task AssignRoleAsync(Guid userId, string role)
+        public async Task AssignRoleAsync(int userId, string role)
         {
             var user = await _unitOfWork.User.GetByIdAsync(userId)
                 ?? throw new KeyNotFoundException("User not found");
@@ -64,7 +66,7 @@ namespace WarehouseManagement.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<UserDto?> GetUserByIdAsync(Guid id, ICurrentUserService currentUserService)
+        public async Task<UserDto?> GetUserByIdAsync(int id, ICurrentUserService currentUserService)
         {
             var user = await _unitOfWork.User.GetByIdAsync(id);
             if (user != null)
@@ -83,13 +85,14 @@ namespace WarehouseManagement.Application.Services
             throw new KeyNotFoundException("User with ID not exist");
         }
 
-        public async Task<IEnumerable<UserDto?>> GetAllUsersAsync()
+        public async Task<IQueryable<UserDto?>> GetAllUsersAsync()
         {
-            var users = await _unitOfWork.User.GetAllAsync();
-            return _mapper.Map<IEnumerable<UserDto>>(users);
+            var users = _unitOfWork.User.GetAllAsync();
+            var result = await users.ToPagedListAsync(1, 10);
+            return _mapper.Map<IQueryable<UserDto?>>(result);
         }
 
-        public async Task<UserDto> UpdateUserAsync(Guid id, UpdateUserDto dto, ICurrentUserService currentUserId)
+        public async Task<UserDto> UpdateUserAsync(int id, UpdateUserDto dto, ICurrentUserService currentUserId)
         {
             var user = await _unitOfWork.User.GetByIdAsync(id) ?? throw new KeyNotFoundException("User with ID not exist");
             bool isAdmin = currentUserId.Roles == "Admin";
@@ -117,14 +120,14 @@ namespace WarehouseManagement.Application.Services
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task DeleteUserAsync(Guid id)
+        public async Task DeleteUserAsync(int id)
         {
             var user = await _unitOfWork.User.GetByIdAsync(id) ?? throw new KeyNotFoundException("User with ID not exist");
             _unitOfWork.User.Delete(user);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<UserDto> ChangPassword(Guid id, ChangePasswordDto dto, ICurrentUserService currentUserService)
+        public async Task<UserDto> ChangPassword(int id, ChangePasswordDto dto, ICurrentUserService currentUserService)
         {
             var currentUser = currentUserService.UserId;
             bool isAdmin = currentUserService.Roles == "Admin";

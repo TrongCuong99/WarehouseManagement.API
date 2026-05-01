@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,7 +173,7 @@ namespace InterationTest
                 SKU = "TEST123",
                 Name = "Test Product",
                 Description = "This is a test product",
-                CategoryId = Guid.NewGuid(),
+                CategoryId = It.IsAny<int>(),
                 SupplierId = supplierResponse!.Data!.Id,
                 Price = 900
             };
@@ -219,7 +220,7 @@ namespace InterationTest
                 Name = "Test Product",
                 Description = "This is a test product",
                 CategoryId = categoriesResponse!.Data!.Id,
-                SupplierId = Guid.NewGuid(),
+                SupplierId = It.IsAny<int>(),
                 Price = 900
             };
 
@@ -265,7 +266,7 @@ namespace InterationTest
                 Name = "Test Product",
                 Description = "This is a test product",
                 CategoryId = categoriesResponse!.Data!.Id,
-                SupplierId = Guid.NewGuid(),
+                SupplierId = It.IsAny<int>(),
                 Price = 900
             };
             Authenticate("Staff");
@@ -305,7 +306,7 @@ namespace InterationTest
                 Name = "Test Product",
                 Description = "This is a test product",
                 CategoryId = categoriesResponse!.Data!.Id,
-                SupplierId = Guid.NewGuid(),
+                SupplierId = It.IsAny<int>(),
                 Price = 900
             };
             Client.DefaultRequestHeaders.Authorization = null;

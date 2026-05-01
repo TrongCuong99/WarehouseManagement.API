@@ -18,8 +18,8 @@ namespace WarehouseManagement.API.Controllers
             return Ok(new ApiResponse<IEnumerable<StockDto>>(200, "Get All Stocks Successfully", stocks));
         }
 
-        [HttpGet("{stockId}")]
-        public async Task<IActionResult> GetStockById(Guid stockId)
+        [HttpGet("{stockId:int}")]
+        public async Task<IActionResult> GetStockById(int stockId)
         {
             var stock = await _stockService.GetStockByIdAsync(stockId);
             if (stock == null)

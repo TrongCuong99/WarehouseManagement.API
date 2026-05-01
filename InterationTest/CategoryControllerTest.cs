@@ -248,7 +248,7 @@ namespace InterationTest
             var result = await Client.DeleteAsync($"api/category/{createdCategory!.Data!.Id}");
 
             // Assert
-            result.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+            result.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
 
         [Fact]

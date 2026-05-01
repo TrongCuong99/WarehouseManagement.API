@@ -14,7 +14,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
             return await _dbSet.AnyAsync(u => u.Email == username);
         }
 
-        public async Task<IEnumerable<WarehouseTransaction>> GetApprovedTransactionsAsync(Guid userId)
+        public async Task<IEnumerable<WarehouseTransaction>> GetApprovedTransactionsAsync(int userId)
         {
             return await WarehouseContext.WarehouseTransactions!
                 .Where(t => t.ApprovedBy == userId)
@@ -29,7 +29,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<WarehouseTransaction>> GetCreatedTransactionsAsync(Guid userId)
+        public async Task<IEnumerable<WarehouseTransaction>> GetCreatedTransactionsAsync(int userId)
         {
             return await WarehouseContext.WarehouseTransactions!
                 .Where(t => t.CreatedBy == userId)
@@ -37,7 +37,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Warehouse>> GetWarehousesByUserAsync(Guid userId)
+        public async Task<IEnumerable<Warehouse>> GetWarehousesByUserAsync(int userId)
         {
             var user = await WarehouseContext.Users!
                         .Include(u => u.Warehouses)
@@ -46,7 +46,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
             return user?.Warehouses ?? Enumerable.Empty<Warehouse>();
         }
 
-        public async Task<bool> HasApprovedTransactionsAsync(Guid userId)
+        public async Task<bool> HasApprovedTransactionsAsync(int userId)
         {
             return await WarehouseContext.WarehouseTransactions!
                 .AnyAsync(t => t.ApprovedBy == userId);

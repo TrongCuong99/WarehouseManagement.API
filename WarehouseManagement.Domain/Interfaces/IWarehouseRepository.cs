@@ -7,9 +7,9 @@ namespace WarehouseManagement.Domain.Interfaces
     {
         Task<Warehouse?> GetByNameAsync(string name);
         Task<bool> ExistsByNameAsync(string name);
-        Task<IEnumerable<Product>> GetProductsInWarehouseAsync(Guid warehouseId);
-        Task<bool> HasProductsAsync(Guid warehouseId);
-        Task<int> GetTotalStockQuantityAsync(Guid warehouseId);
-        Task<bool> ExistsByIdAsync(Guid warehouseId);
+        Task<IEnumerable<Product>> GetProductsInWarehouseAsync(int warehouseId);
+        Task<bool> HasProductsAsync(int warehouseId);
+        Task<int> GetTotalStockQuantityAsync(int warehouseId);
+        Task<bool> ExistsByIdAsync(int warehouseId);
     }
 }

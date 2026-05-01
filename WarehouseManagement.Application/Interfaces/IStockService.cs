@@ -5,9 +5,9 @@ namespace WarehouseManagement.Application.Interfaces
 {
     public interface IStockService
     {
-        Task<Stock> UpdateStockAsync(Guid productId, Guid warehouseId, int quantityChange);
-        Task<IEnumerable<StockDto>> GetAllStocksAsync();
-        Task<StockDto?> GetStockByIdAsync(Guid stockId);
-        Task<Stock> CreateStock(Guid productId, Guid warehoueId);
+        Task<Stock> UpdateStockAsync(int productId, int warehouseId, int quantityChange);
+        Task<IQueryable<StockDto>> GetAllStocksAsync();
+        Task<StockDto?> GetStockByIdAsync(int stockId);
+        Task<Stock> CreateStock(int productId, int warehoueId);
     }
 }

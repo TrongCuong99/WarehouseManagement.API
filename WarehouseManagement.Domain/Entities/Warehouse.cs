@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Utilities.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,15 +15,15 @@ namespace WarehouseManagement.Domain.Entities
         public int Capacity { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<Stock> Stocks { get; set; } = [];
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
         public User User { get; set; } = null!;
         private Warehouse() { }
 
-        public Warehouse(string name, string location, int capacity, Guid userId)
+        public Warehouse(string name, string location, int capacity, int userId)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new DomainException("Name is required.");
-            if (userId == Guid.Empty)
+            if (userId <= 0)
                 throw new DomainException("Warehouse must belong to a valid user.");
             SetLocation(location);
             SetCapacity(capacity);

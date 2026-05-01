@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,14 +122,14 @@ namespace InterationTest
                 Password = "Test@123"
             };
             var userlogin = await Client.PostAsJsonAsync("api/user/login", request);
-            var userId = await userlogin.Content.ReadFromJsonAsync<ApiResponse<UserDto>>();
+            await userlogin.Content.ReadFromJsonAsync<ApiResponse<UserDto>>();
 
             var warehouse = new CreateWarehouseDto
             {
                 Name = "Test Warehouse",
                 Location = "Test Location",
                 Capacity = 1000,
-                UserId = Guid.NewGuid(),
+                UserId = It.IsAny<int>(),
             };
 
             // Act
@@ -600,7 +601,7 @@ namespace InterationTest
                 Name = "Warehouse",
                 Location = "Updated Location",
                 Capacity = 3000,
-                UserId = Guid.NewGuid(),
+                UserId = 2,
             };
 
             // Act
@@ -648,7 +649,7 @@ namespace InterationTest
                 Name = "Warehouse",
                 Location = "Updated Location",
                 Capacity = 1000,
-                UserId = Guid.Empty,
+                UserId = 0,
             };
 
             // Act
@@ -702,7 +703,7 @@ namespace InterationTest
                 Name = "Warehouse",
                 Location = "Updated Location",
                 Capacity = 1000,
-                UserId = Guid.Empty,
+                UserId = 0,
             };
             Client.DefaultRequestHeaders.Authorization = null;
             Client.DefaultRequestHeaders.Remove("X-Test-Role");
@@ -752,7 +753,7 @@ namespace InterationTest
                 Name = "Warehouse",
                 Location = "Updated Location",
                 Capacity = 1000,
-                UserId = Guid.Empty,
+                UserId = 0,
             };
             Authenticate("Staff");
 

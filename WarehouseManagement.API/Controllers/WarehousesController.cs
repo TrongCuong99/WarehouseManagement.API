@@ -32,8 +32,8 @@ namespace WarehouseManagement.API.Controllers
             return BadRequest(new ApiResponse<WarehouseDto>(400, "Warehouse creation failed"));
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
         {
             var warehouse = await _service.GetByIdAsync(id);
             if (warehouse != null)
@@ -44,16 +44,16 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateWarehouseDto dto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateWarehouseDto dto)
         {
             var warehouse = await _service.UpdateAsync(id, dto);
             return Ok(new ApiResponse<WarehouseDto>(200, "Warehouse updated successfully", warehouse));
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
             return Ok(new ApiResponse<WarehouseDto>(200, "Warehouse deleted successfully"));

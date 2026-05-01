@@ -35,7 +35,7 @@ namespace InterationTest
             Client.DefaultRequestHeaders.Add("X-Test-Role", role);
         }
 
-        protected void AuthenticateAsUser(Guid userId)
+        protected void AuthenticateAsUser(int userId)
         {
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Test");
@@ -44,7 +44,7 @@ namespace InterationTest
             Client.DefaultRequestHeaders.Add("X-Test-UserId", userId.ToString());
         }
 
-        protected async Task<Guid> CreateUserAndAssignRoleAsync(string email, string role)
+        protected async Task<int> CreateUserAndAssignRoleAsync(string email, string role)
         {
             using var scope = Factory.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<WarehouseDbContext>();

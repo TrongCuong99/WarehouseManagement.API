@@ -12,7 +12,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
 {
     public class SupplierRepository(WarehouseDbContext context) : BaseRepository<Supplier>(context), ISupplierRepository
     {
-        public async Task<bool> ExistsByIdAsync(Guid id)
+        public async Task<bool> ExistsByIdAsync(int id)
         {
             return await _dbSet.AnyAsync(s => s.Id == id);
         }
@@ -22,7 +22,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
             return await _dbSet.FirstOrDefaultAsync(s => s.Name == name);
         }
 
-        public async Task<IEnumerable<Product>> GetProductsBySupplierAsync(Guid supplierId)
+        public async Task<IEnumerable<Product>> GetProductsBySupplierAsync(int supplierId)
         {
             return await _dbSet
                 .Where(s => s.Id == supplierId)
@@ -31,7 +31,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Supplier?> GetByIdWithProductsAsync(Guid supplierId)
+        public async Task<Supplier?> GetByIdWithProductsAsync(int supplierId)
         {
             return await _dbSet.Include(s => s.ProductSuppliers)
                 .ThenInclude(ps => ps.Product)

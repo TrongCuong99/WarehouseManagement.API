@@ -12,11 +12,11 @@ namespace WarehouseManagement.Application.Interfaces
     {
         Task<UserDto> RegisterAsync(UserRegisterDto dto);
         Task<AuthResponseDto> LoginAsync(UserLoginDto dto);
-        Task AssignRoleAsync(Guid userId, string role);
-        Task<UserDto?> GetUserByIdAsync(Guid id, ICurrentUserService currentUserService);
-        Task<IEnumerable<UserDto?>> GetAllUsersAsync();
-        Task<UserDto> UpdateUserAsync(Guid id, UpdateUserDto dto, ICurrentUserService currentUserId);
-        Task<UserDto> ChangPassword(Guid id, ChangePasswordDto dto, ICurrentUserService currentUserId);
-        Task DeleteUserAsync(Guid id);
+        Task AssignRoleAsync(int userId, string role);
+        Task<UserDto?> GetUserByIdAsync(int id, ICurrentUserService currentUserService);
+        Task<IQueryable<UserDto?>> GetAllUsersAsync();
+        Task<UserDto> UpdateUserAsync(int id, UpdateUserDto dto, ICurrentUserService currentUserId);
+        Task<UserDto> ChangPassword(int id, ChangePasswordDto dto, ICurrentUserService currentUserId);
+        Task DeleteUserAsync(int id);
     }
 }

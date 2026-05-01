@@ -100,7 +100,7 @@ namespace UnitTest
             var category = new Category("Electronics", "Electronic devices and gadgets");
 
             _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
-            _categoryRepoMock.Setup(c => c.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((Category?)null);
+            _categoryRepoMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Category?)null);
             _mapperMock.Setup(m => m.Map<CategoryDto>(It.IsAny<Category>())).Returns(new CategoryDto() { Name = category.Name, Description = category.Description });
 
             //Act&&Assert
@@ -118,8 +118,10 @@ namespace UnitTest
                 new("Electronics", "Electronic devices and gadgets"),
                 new("Furniture", "Home and office furniture")
             };
+
+            var mockedCategories = categories.AsQueryable();
             _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
-            _categoryRepoMock.Setup(c => c.GetAllAsync()).ReturnsAsync(categories);
+            _categoryRepoMock.Setup(c => c.GetAllAsync()).Returns(mockedCategories);
             _mapperMock.Setup(m => m.Map<IEnumerable<CategoryDto?>>(It.IsAny<IEnumerable<Category>>()))
                 .Returns([
                 new() { Name = "Electronics", Description = "Electronic devices and gadgets"},
@@ -138,8 +140,9 @@ namespace UnitTest
         public async Task GetAllCategories_ShouldEmpty_WhenCategoriesNotExist()
         {
             // Arrange
+            var mockCategories = new List<Category>().AsQueryable();
             _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
-            _categoryRepoMock.Setup(c => c.GetAllAsync()).ReturnsAsync([]);
+            _categoryRepoMock.Setup(c => c.GetAllAsync()).Returns(mockCategories);
             _mapperMock.Setup(m => m.Map<IEnumerable<CategoryDto?>>(It.IsAny<IEnumerable<Category>>())).Returns([]);
 
             // Act
@@ -175,10 +178,10 @@ namespace UnitTest
         {
             // Arrange
             _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
-            _categoryRepoMock.Setup(c => c.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Category?)null);
+            _categoryRepoMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Category?)null);
 
             //Act&&Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _categoryService.GetCategoryByIdAsync(Guid.NewGuid()));
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _categoryService.GetCategoryByIdAsync(1));
         }
         #endregion
 
@@ -194,7 +197,7 @@ namespace UnitTest
                 Description = "Updated description"
             };
             _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
-            _categoryRepoMock.Setup(c => c.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((Category?)null);
+            _categoryRepoMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Category?)null);
             _mapperMock.Setup(m => m.Map<CategoryDto>(It.IsAny<Category>())).Returns(new CategoryDto() { Name = category.Name, Description = category.Description });
 
             // Act & Assert

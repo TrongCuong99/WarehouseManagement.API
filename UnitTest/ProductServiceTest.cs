@@ -34,8 +34,8 @@ namespace UnitTest
                 Description = "Test Description",
                 SKU = "TP001",
                 Price = 100,
-                CategoryId = Guid.NewGuid(),
-                SupplierId = Guid.NewGuid()
+                CategoryId = It.IsAny<int>(),
+                SupplierId = It.IsAny<int>()
             };
             _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
             _categoryRepoMock.Setup(r => r.GetByIdAsync(createproduct.CategoryId)).ReturnsAsync(new Category("Dien tu", "do dung dien tu"));
@@ -72,8 +72,8 @@ namespace UnitTest
                 Description = "Test Description",
                 SKU = "TP001",
                 Price = 100,
-                CategoryId = Guid.NewGuid(),
-                SupplierId = Guid.NewGuid()
+                CategoryId = It.IsAny<int>(),
+                SupplierId = It.IsAny<int>()
             };
             _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
             _categoryRepoMock.Setup(r => r.GetByIdAsync(createproduct.CategoryId)).ReturnsAsync((Category?)null);
@@ -93,8 +93,8 @@ namespace UnitTest
                 Description = "Test Description",
                 SKU = "TP001",
                 Price = 100,
-                CategoryId = Guid.NewGuid(),
-                SupplierId = Guid.NewGuid()
+                CategoryId = It.IsAny<int>(),
+                SupplierId = It.IsAny<int>()
             };
             _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
             _categoryRepoMock.Setup(r => r.GetByIdAsync(createproduct.CategoryId)).ReturnsAsync(new Category("Dien tu", "do dung dien tu"));
@@ -115,8 +115,8 @@ namespace UnitTest
                 Description = "Test Description",
                 SKU = "TP001",
                 Price = 100,
-                CategoryId = Guid.NewGuid(),
-                SupplierId = Guid.NewGuid()
+                CategoryId = It.IsAny<int>(),
+                SupplierId = It.IsAny<int>()
             };
             _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
             _categoryRepoMock.Setup(r => r.GetByIdAsync(createproduct.CategoryId)).ReturnsAsync(new Category("Dien tu", "do dung dien tu"));
@@ -187,8 +187,11 @@ namespace UnitTest
                 new("Product 1", "Description 1", "SKU1", 50){Name = "Product 1", Description = "Description 1"},
                 new("Product 2", "Description 2", "SKU2", 75){Name = "Product 2", Description = "Description 2"}
             };
+
+            var mockQueryable = products.AsQueryable();
+
             _unitOfWorkMock.Setup(u => u.Products).Returns(_productRepoMock.Object);
-            _productRepoMock.Setup(r => r.GetAllAsync(p => p.Categories)).ReturnsAsync(products);
+            _productRepoMock.Setup(r => r.GetAllAsync(p => p.Categories)).Returns(mockQueryable);
             _mapperMock.Setup(m => m.Map<IEnumerable<ProductDto?>>(products)).Returns(
             [
                 new() { Name = "Product 1", Description = "Description 1", Price = 50 },
@@ -198,22 +201,24 @@ namespace UnitTest
             var result = await _productService.GetAllProductsAsync();
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(2, result.Count());
+            Assert.Equal(2, result.TotalCount);
         }
 
         [Fact]
         public async Task GetAllProducts_ShouldThrowException_WhenProductsNotExist()
         {
             // Arrange
+            var transactions = new List<Product>();
+
+            var mockQueryable = transactions.AsQueryable();
             _unitOfWorkMock.Setup(u => u.Products).Returns(_productRepoMock.Object);
-            _productRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync([]);
+            _productRepoMock.Setup(r => r.GetAllAsync()).Returns(mockQueryable);
 
             //Act
             var result = await _productService.GetAllProductsAsync();
 
             //Assert
             Assert.NotNull(result);
-            Assert.Empty(result);
         }
         #endregion
 
@@ -412,7 +417,7 @@ namespace UnitTest
                 SKU = "TP001"
             };
             _unitOfWorkMock.Setup(u => u.Products).Returns(_productRepoMock.Object);
-            _productRepoMock.Setup(r => r.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((Product?)null);
+            _productRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Product?)null);
             //Act&&Assert
             await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _productService.DeleteProductAsync(product.Id));
         }

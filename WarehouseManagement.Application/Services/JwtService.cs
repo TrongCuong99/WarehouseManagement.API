@@ -13,7 +13,7 @@ namespace WarehouseManagement.Application.Services
     {
         private readonly IConfiguration _config = config;
 
-        public (string, DateTime) GenerateToken(Guid userId, string email, string role)
+        public (string, DateTime) GenerateToken(int userId, string email, string role)
         {
             var claims = new[]
             {

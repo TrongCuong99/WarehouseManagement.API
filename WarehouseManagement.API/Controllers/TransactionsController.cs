@@ -26,8 +26,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("{id:guid}/approve")]
-        public async Task<IActionResult> Approve(Guid id, [FromServices] ICurrentUserService currentUserService)
+        [HttpPost("{id:int}/approve")]
+        public async Task<IActionResult> Approve(int id, [FromServices] ICurrentUserService currentUserService)
         {
             var approve = await _service.ApproveTransactionAsync(id, currentUserService);
             if (approve != null)
@@ -38,8 +38,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("{id:guid}/reject")]
-        public async Task<IActionResult> Reject(Guid id, [FromBody] string reason)
+        [HttpPost("{id:int}/reject")]
+        public async Task<IActionResult> Reject(int id, [FromBody] string reason)
         {
             var reject = await _service.RejectTransactionAsync(id, reason);
             if (reject != null)
@@ -56,8 +56,8 @@ namespace WarehouseManagement.API.Controllers
             return Ok(new ApiResponse<IEnumerable<WarehouseTransactionDto>>(200, "Get Transactions Successfully", transactions));
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetByIdTransaction(Guid id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetByIdTransaction(int id)
         {
             var transaction = await _service.GetTransactionByIdAsync(id);
             if (transaction != null)
@@ -68,8 +68,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("update/{id:guid}")]
-        public async Task<IActionResult> UpdateTransaction(Guid id, [FromBody] UpdateWarehouseTransactionDto dto, [FromServices] ICurrentUserService currentUserService)
+        [HttpPut("update/{id:int}")]
+        public async Task<IActionResult> UpdateTransaction(int id, [FromBody] UpdateWarehouseTransactionDto dto, [FromServices] ICurrentUserService currentUserService)
         {
             var update = await _service.UpdateTransactionAsync(id, dto, currentUserService);
             if (update != null)
@@ -80,8 +80,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteTransaction(Guid id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteTransaction(int id)
         {
             await _service.DeleteTransactionAsync(id);
             return Ok(new ApiResponse<string>(200, "Delete Transaction Successfully", null));

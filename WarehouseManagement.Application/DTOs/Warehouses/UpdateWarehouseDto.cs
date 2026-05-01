@@ -13,6 +13,6 @@ namespace WarehouseManagement.Application.DTOs.Warehouses
         public int Capacity { get; set; }
 
         // Cho phép đổi người phụ trách (admin-only)
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
     }
 }

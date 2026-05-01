@@ -93,7 +93,7 @@ namespace UnitTest
                 "1234567891",
                 "124 Supplier St.");
             _unitOfWorkMock.Setup(u => u.Supplier).Returns(_supplierRepoMock.Object);
-            _supplierRepoMock.Setup(r => r.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((Supplier?)null);
+            _supplierRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Supplier?)null);
 
             //Act&&Assert
             await Assert.ThrowsAsync<KeyNotFoundException>(() => _supplierService.DeleteAsync(supplier.Id));
@@ -127,8 +127,12 @@ namespace UnitTest
             var supplier1 = new Supplier("Supplier A", "supplier1@email.com", "1234567890", "123 Supplier St.");
             var supplier2 = new Supplier("Supplier B", "supplier2@email.com", "1234567891", "124 Supplier St.");
 
+            var suppliers = new List<Supplier> { supplier1, supplier2 };
+
+            var mockQueryable = suppliers.AsQueryable();
+
             _unitOfWorkMock.Setup(u => u.Supplier).Returns(_supplierRepoMock.Object);
-            _supplierRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync([supplier1, supplier2]);
+            _supplierRepoMock.Setup(r => r.GetAllAsync()).Returns(mockQueryable);
             _mapperMock.Setup(m => m.Map<List<SupplierDto>>(It.IsAny<IEnumerable<Supplier>>()))
                 .Returns([
                     new SupplierDto
@@ -158,8 +162,11 @@ namespace UnitTest
         public async Task GetAllSupplier_ShouldReturnEmpty_WhenSupplierNotExist()
         {
             //Arrange
+            var transactions = new List<Supplier>();
+
+            var mockQueryable = transactions.AsQueryable();
             _unitOfWorkMock.Setup(u => u.Supplier).Returns(_supplierRepoMock.Object);
-            _supplierRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync([]);
+            _supplierRepoMock.Setup(r => r.GetAllAsync()).Returns(mockQueryable);
             _mapperMock.Setup(m => m.Map<List<SupplierDto>>(It.IsAny<IEnumerable<Supplier>>())).Returns([]);
 
             //Act
@@ -177,9 +184,9 @@ namespace UnitTest
         {
             //Arrange
             _unitOfWorkMock.Setup(u => u.Supplier).Returns(_supplierRepoMock.Object);
-            _supplierRepoMock.Setup(r => r.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((Supplier?)null);
+            _supplierRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Supplier?)null);
             //Act&&Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => _supplierService.GetByIdAsync(Guid.NewGuid()));
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => _supplierService.GetByIdAsync(It.IsAny<int>()));
         }
 
         [Fact]
@@ -245,7 +252,7 @@ namespace UnitTest
             //Arrange
             var supplier = new Supplier("Supplier A", "supplier@email.com", "1234567890", "123 Supplier St.");
             _unitOfWorkMock.Setup(u => u.Supplier).Returns(_supplierRepoMock.Object);
-            _supplierRepoMock.Setup(r => r.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((Supplier?)null);
+            _supplierRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Supplier?)null);
 
             //Act&&Assert
             await Assert.ThrowsAsync<KeyNotFoundException>(() => _supplierService.UpdateAsync(supplier.Id, new UpdateSupplierDto()));

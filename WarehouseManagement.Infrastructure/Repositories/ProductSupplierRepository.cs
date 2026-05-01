@@ -11,22 +11,22 @@ namespace WarehouseManagement.Infrastructure.Repositories
 {
     public class ProductSupplierRepository(DbContext context) : BaseRepository<ProductSupplier>(context), IProductSupplierRepository
     {
-        public async Task<ProductSupplier?> GetByProductAndSupplierAsync(Guid productId, Guid supplierId)
+        public async Task<ProductSupplier?> GetByProductAndSupplierAsync(int productId, int supplierId)
         {
             return await _dbSet.FirstOrDefaultAsync(ps => ps.ProductId == productId && ps.SupplierId == supplierId);
         }
 
-        public async Task<IEnumerable<ProductSupplier>> GetByProductIdAsync(Guid productId)
+        public async Task<IEnumerable<ProductSupplier>> GetByProductIdAsync(int productId)
         {
             return await _dbSet.Where(ps => ps.ProductId == productId).ToListAsync();
         }
 
-        public async Task<IEnumerable<ProductSupplier>> GetBySupplierIdAsync(Guid supplierId)
+        public async Task<IEnumerable<ProductSupplier>> GetBySupplierIdAsync(int supplierId)
         {
             return await _dbSet.Where(ps => ps.SupplierId == supplierId).ToListAsync();
         }
 
-        public Task<decimal?> GetSupplyPriceAsync(Guid productId, Guid supplierId)
+        public Task<decimal?> GetSupplyPriceAsync(int productId, int supplierId)
         {
             return _dbSet
                 .Where(ps => ps.ProductId == productId && ps.SupplierId == supplierId)

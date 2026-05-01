@@ -9,12 +9,12 @@ namespace WarehouseManagement.Application.DTOs.WarehouseTransactions
 {
     public class WarehouseTransactionDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string ReferenceNumber { get; set; } = string.Empty;
         public TransactionTypes TransactionType { get; set; }
         public string Status { get; set; } = string.Empty; // Pending / Approved / Rejected
-        public Guid WarehouseId { get; set; }
-        public Guid CreatedBy { get; set; }
+        public int WarehouseId { get; set; }
+        public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

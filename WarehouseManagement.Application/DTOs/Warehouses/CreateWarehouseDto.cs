@@ -13,6 +13,6 @@ namespace WarehouseManagement.Application.DTOs.Warehouses
         public int Capacity { get; set; }
 
         // Nếu bạn muốn cho admin gán kho cho user cụ thể
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
     }
 }

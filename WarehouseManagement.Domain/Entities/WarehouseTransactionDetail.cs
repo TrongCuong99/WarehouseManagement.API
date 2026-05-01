@@ -9,16 +9,16 @@ namespace WarehouseManagement.Domain.Entities
 {
     public class WarehouseTransactionDetail : BaseEntity
     {
-        public Guid WarehouseTransactionId { get; set; }
+        public int WarehouseTransactionId { get; set; }
         public WarehouseTransaction WarehouseTransaction { get; set; } = null!;
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
         public Product Product { get; set; } = null!;
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public string Remarks { get; set; } = string.Empty;
         private WarehouseTransactionDetail() { }
 
-        public WarehouseTransactionDetail(Guid productId, int quantity, decimal unitPrice, string remarks)
+        public WarehouseTransactionDetail(int productId, int quantity, decimal unitPrice, string remarks)
         {
             ProductId = productId;
             SetQuantity(quantity);

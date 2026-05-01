@@ -197,7 +197,7 @@ namespace UnitTest
 
             _unitOfWorkMock.Setup(u => u.User).Returns(_userRepoMock.Object);
             _userRepoMock.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
-            _currentUserService.Setup(c => c.UserId).Returns(Guid.NewGuid());
+            _currentUserService.Setup(c => c.UserId).Returns(It.IsAny<int>());
             _currentUserService.Setup(c => c.Roles).Returns("Admin");
             _mapperMock.Setup(m => m.Map<UserDto>(It.IsAny<User>())).Returns(new UserDto { Email = user.Email, Id = user.Id, Role = "Admin" });
 
@@ -221,9 +221,11 @@ namespace UnitTest
             var user = new User("test@gmail.com", "123546");
             var user2 = new User("test2@gmail.com", "123456");
 
+            var mockQueryable = new List<User> { user, user2 }.AsQueryable();
+
             _unitOfWorkMock.Setup(u => u.User).Returns(_userRepoMock.Object);
-            _userRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync([user, user2]);
-            _currentUserService.Setup(c => c.UserId).Returns(Guid.NewGuid());
+            _userRepoMock.Setup(r => r.GetAllAsync()).Returns(mockQueryable);
+            _currentUserService.Setup(c => c.UserId).Returns(It.IsAny<int>());
             _currentUserService.Setup(c => c.Roles).Returns("Admin");
             _mapperMock.Setup(m => m.Map<UserDto>(user)).Returns(new UserDto { Email = user.Email, Id = user.Id, Role = "Staff" });
             _mapperMock.Setup(m => m.Map<UserDto>(user2)).Returns(new UserDto { Email = user2.Email, Id = user.Id, Role = "Staff" });
@@ -241,9 +243,11 @@ namespace UnitTest
             //Arrange
             var dto = new UserLoginDto { Email = "admid@system.com", Password = "123546" };
 
+            var mockQueryable = new List<User>().AsQueryable();
+
             _unitOfWorkMock.Setup(u => u.User).Returns(_userRepoMock.Object);
-            _userRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync([]);
-            _currentUserService.Setup(c => c.UserId).Returns(Guid.NewGuid());
+            _userRepoMock.Setup(r => r.GetAllAsync()).Returns(mockQueryable);
+            _currentUserService.Setup(c => c.UserId).Returns(It.IsAny<int>());
             _currentUserService.Setup(c => c.Roles).Returns("Admin");
 
             //Act
@@ -291,7 +295,7 @@ namespace UnitTest
 
             _unitOfWorkMock.Setup(u => u.User).Returns(_userRepoMock.Object);
             _userRepoMock.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
-            _currentUserService.Setup(c => c.UserId).Returns(Guid.NewGuid());
+            _currentUserService.Setup(c => c.UserId).Returns(It.IsAny<int>());
             _currentUserService.Setup(c => c.Roles).Returns("Staff");
 
             //Assert&Act
@@ -332,7 +336,7 @@ namespace UnitTest
 
             _unitOfWorkMock.Setup(u => u.User).Returns(_userRepoMock.Object);
             _userRepoMock.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
-            _currentUserService.Setup(c => c.UserId).Returns(Guid.NewGuid());
+            _currentUserService.Setup(c => c.UserId).Returns(It.IsAny<int>());
             _currentUserService.Setup(c => c.Roles).Returns("Admin");
             _mapperMock.Setup(m => m.Map<UserDto>(user)).Returns(new UserDto { Email = updateuser.Email, Role = "Admin" });
 
@@ -354,8 +358,8 @@ namespace UnitTest
             var user = new User("test@gmail.com", "123456");
 
             _unitOfWorkMock.Setup(u => u.User).Returns(_userRepoMock.Object);
-            _userRepoMock.Setup(r => r.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((User?)null);
-            _currentUserService.Setup(c => c.UserId).Returns(Guid.NewGuid());
+            _userRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((User?)null);
+            _currentUserService.Setup(c => c.UserId).Returns(It.IsAny<int>());
             _currentUserService.Setup(c => c.Roles).Returns("Admin");
 
             //Act&Assert
@@ -399,7 +403,7 @@ namespace UnitTest
 
             _unitOfWorkMock.Setup(u => u.User).Returns(_userRepoMock.Object);
             _userRepoMock.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
-            _currentUserService.Setup(c => c.UserId).Returns(Guid.NewGuid);
+            _currentUserService.Setup(c => c.UserId).Returns(It.IsAny<int>());
             _currentUserService.Setup(c => c.Roles).Returns("Staff");
             _passwordHasherMock.Setup(p => p.Verify(changePassword.CurrentPassword!, user.Password)).Returns(true);
             _passwordHasherMock.Setup(p => p.Hash(changePassword.NewPassword)).Returns(changePassword.NewPassword);

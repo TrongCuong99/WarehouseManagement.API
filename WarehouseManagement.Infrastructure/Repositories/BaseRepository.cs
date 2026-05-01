@@ -10,7 +10,7 @@ namespace WarehouseManagement.Infrastructure.Repositories
         protected readonly DbContext _context = context;
         protected readonly DbSet<T> _dbSet = context.Set<T>();
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync(
+        public virtual IQueryable<T> GetAllAsync(
             params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet;
@@ -18,10 +18,10 @@ namespace WarehouseManagement.Infrastructure.Repositories
             foreach (var include in includes)
                 query = query.Include(include);
 
-            return await query.ToListAsync();
+            return query;
         }
 
-        public virtual async Task<T?> GetByIdAsync(Guid id, params Expression<Func<T, object>>[] includes)
+        public virtual async Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet;
 

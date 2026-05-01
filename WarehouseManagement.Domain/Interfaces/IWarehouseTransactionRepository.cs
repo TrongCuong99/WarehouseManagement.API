@@ -9,15 +9,15 @@ namespace WarehouseManagement.Domain.Interfaces
 {
     public interface IWarehouseTransactionRepository : IRepository<WarehouseTransaction>
     {
-        Task<WarehouseTransaction?> GetTransactionWithDetailsAsync(Guid transactionId);
+        Task<WarehouseTransaction?> GetTransactionWithDetailsAsync(int transactionId);
         Task<WarehouseTransaction?> GetByReferenceNumberAsync(string referenceNumber);
         Task<bool> ExistsByReferenceNumberAsync(string referenceNumber);
-        Task<IEnumerable<WarehouseTransaction>> GetByWarehouseAsync(Guid warehouseId);
-        Task<IEnumerable<WarehouseTransaction>> GetByUserAsync(Guid userId);
+        Task<IEnumerable<WarehouseTransaction>> GetByWarehouseAsync(int warehouseId);
+        Task<IEnumerable<WarehouseTransaction>> GetByUserAsync(int userId);
         Task<IEnumerable<WarehouseTransaction>> GetByDateRangeAsync(DateTime start, DateTime end);
-        Task ApproveTransactionAsync(Guid transactionId, Guid approvedByUserId);
-        Task RejectTransactionAsync(Guid transactionId, string reason);
-        Task<decimal> GetTotalImportValueAsync(Guid warehouseId, DateTime from, DateTime to);
-        Task<decimal> GetTotalExportValueAsync(Guid warehouseId, DateTime from, DateTime to);
+        Task ApproveTransactionAsync(int transactionId, int approvedByUserId);
+        Task RejectTransactionAsync(int transactionId, string reason);
+        Task<decimal> GetTotalImportValueAsync(int warehouseId, DateTime from, DateTime to);
+        Task<decimal> GetTotalExportValueAsync(int warehouseId, DateTime from, DateTime to);
     }
 }

@@ -9,9 +9,9 @@ namespace WarehouseManagement.Domain.Interfaces
 {
     public interface IProductSupplierRepository : IRepository<ProductSupplier>
     {
-        Task<ProductSupplier?> GetByProductAndSupplierAsync(Guid productId, Guid supplierId);
-        Task<IEnumerable<ProductSupplier>> GetByProductIdAsync(Guid productId);
-        Task<IEnumerable<ProductSupplier>> GetBySupplierIdAsync(Guid supplierId);
-        Task<decimal?> GetSupplyPriceAsync(Guid productId, Guid supplierId);
+        Task<ProductSupplier?> GetByProductAndSupplierAsync(int productId, int supplierId);
+        Task<IEnumerable<ProductSupplier>> GetByProductIdAsync(int productId);
+        Task<IEnumerable<ProductSupplier>> GetBySupplierIdAsync(int supplierId);
+        Task<decimal?> GetSupplyPriceAsync(int productId, int supplierId);
     }
 }

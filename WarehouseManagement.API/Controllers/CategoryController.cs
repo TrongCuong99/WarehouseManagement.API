@@ -20,8 +20,8 @@ namespace WarehouseManagement.API.Controllers
             return Ok(new ApiResponse<IEnumerable<CategoryDto?>>(200, "Get All Category Successfully", categories));
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
@@ -44,8 +44,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCategoryDto dto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateCategoryDto dto)
         {
             var category = await _categoryService.UpdateCategoryAsync(id, dto);
             if (category == null)
@@ -56,8 +56,8 @@ namespace WarehouseManagement.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             await _categoryService.DeleteCategoryAsync(id);
             return Ok(new ApiResponse<CategoryDto>(200, "Delete Category Successfully"));

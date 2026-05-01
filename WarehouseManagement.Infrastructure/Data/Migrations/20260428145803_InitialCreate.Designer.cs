@@ -12,26 +12,26 @@ using WarehouseManagement.Infrastructure.Data;
 namespace WarehouseManagement.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20260107153950_AddRefreshToken")]
-    partial class AddRefreshToken
+    [Migration("20260428145803_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "9.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("CategoryProduct", b =>
                 {
-                    b.Property<Guid>("CategoriesId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ProductsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
 
                     b.HasKey("CategoriesId", "ProductsId");
 
@@ -42,38 +42,48 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.AuditLog", b =>
                 {
-                    b.Property<Guid>("AuditLogId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Action")
-                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EntityId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<string>("NewValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TableName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataAfter")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("UserId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("DataBefore")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("AuditLogId");
-
-                    b.HasIndex("UserId");
+                    b.HasKey("Id");
 
                     b.ToTable("AuditLogs");
                 });
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.Category", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -97,9 +107,11 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.Product", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -129,14 +141,14 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.ProductSupplier", b =>
                 {
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("SupplierId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("SupplyPrice")
                         .HasPrecision(18, 2)
@@ -151,15 +163,17 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.Stock", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<int>("QuantityOnHand")
                         .HasColumnType("int");
@@ -167,8 +181,8 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
                     b.Property<int>("ReorderLevel")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -181,9 +195,11 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.Supplier", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasMaxLength(300)
@@ -215,9 +231,11 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -250,9 +268,11 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.Warehouse", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
@@ -265,8 +285,12 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -277,18 +301,20 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.WarehouseTransaction", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("ApprovedBy")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApprovedBy")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
 
                     b.Property<string>("ReferenceNumber")
                         .IsRequired()
@@ -312,9 +338,9 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("WarehouseId")
+                    b.Property<int>("WarehouseId")
                         .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -327,12 +353,14 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.WarehouseTransactionDetail", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -346,8 +374,8 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("WarehouseTransactionId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("WarehouseTransactionId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -371,17 +399,6 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WarehouseManagement.Domain.Entities.AuditLog", b =>
-                {
-                    b.HasOne("WarehouseManagement.Domain.Entities.User", "User")
-                        .WithMany("AuditLogs")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.ProductSupplier", b =>
@@ -487,8 +504,6 @@ namespace WarehouseManagement.Infrastructure.Data.Migrations
             modelBuilder.Entity("WarehouseManagement.Domain.Entities.User", b =>
                 {
                     b.Navigation("ApprovedTransactions");
-
-                    b.Navigation("AuditLogs");
 
                     b.Navigation("CreatedTransactions");
 

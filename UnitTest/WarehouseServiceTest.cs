@@ -35,7 +35,7 @@ namespace UnitTest
         public async Task DeleteWarehouse_ShouldReturnSuccess_WhenWarehouseIdExist()
         {
             // Arrange
-            var warehouse = new Warehouse("Da Nang", "123 NVC", 1000, Guid.NewGuid());
+            var warehouse = new Warehouse("Da Nang", "123 NVC", 1000, It.IsAny<int>());
             _unitOfWorkMock.Setup(uow => uow.Warehouses).Returns(_warehouseRepoMock.Object);
             _warehouseRepoMock.Setup(repo => repo.GetByIdAsync(warehouse.Id)).ReturnsAsync(warehouse);
 
@@ -51,9 +51,9 @@ namespace UnitTest
         public async Task DeleteWarehouse_ShouldThrowException_WhenWarehouseIdNotExist()
         {
             // Arrange
-            var warehouse = new Warehouse("Da Nang", "123 NVC", 1000, Guid.NewGuid());
+            var warehouse = new Warehouse("Da Nang", "123 NVC", 1000, It.IsAny<int>());
             _unitOfWorkMock.Setup(uow => uow.Warehouses).Returns(_warehouseRepoMock.Object);
-            _warehouseRepoMock.Setup(repo => repo.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((Warehouse?)null);
+            _warehouseRepoMock.Setup(repo => repo.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Warehouse?)null);
 
             //Act&&Assert
             await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _warehouseService.DeleteAsync(warehouse.Id));
@@ -67,12 +67,15 @@ namespace UnitTest
             // Arrange
             var warehouses = new List<Warehouse>
             {
-                new("Da Nang", "123 NVC", 1000, Guid.NewGuid()),
-                new("Hue", "456 ABC", 2000, Guid.NewGuid())
+                new("Da Nang", "123 NVC", 1000, It.IsAny < int >()),
+                new("Hue", "456 ABC", 2000, It.IsAny < int >())
             };
+
+            var mockedWarehouses = warehouses.AsQueryable();
+
             _unitOfWorkMock.Setup(uow => uow.Warehouses).Returns(_warehouseRepoMock.Object);
-            _warehouseRepoMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(warehouses);
-            var warehouseDtos = new List<WarehouseDto?>
+            _warehouseRepoMock.Setup(repo => repo.GetAllAsync()).Returns(mockedWarehouses);
+            var warehouseDtos = new List<WarehouseDto?> 
             {
                 new() { Name = "Da Nang", Location = "123 NVC", Capacity = 1000 },
                 new() { Name = "Hue", Location = "456 ABC", Capacity = 2000 }
@@ -91,8 +94,11 @@ namespace UnitTest
         public async Task GetAllWarehouses_ShouldListEmpty_WhenWarehouseNotExist()
         {
             // Arrange
+
+            var mockedWarehouses = new List<Warehouse>().AsQueryable();
+
             _unitOfWorkMock.Setup(uow => uow.Warehouses).Returns(_warehouseRepoMock.Object);
-            _warehouseRepoMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync([]);
+            _warehouseRepoMock.Setup(repo => repo.GetAllAsync()).Returns(mockedWarehouses);
 
             // Act
             var result = await _warehouseService.GetAllAsync();
@@ -108,7 +114,7 @@ namespace UnitTest
         public async Task GetWarehousebyId_ShouldReturnSuccess_WhenWarehouseIdExist()
         {
             // Arrange
-            var warehouses = new Warehouse("Da Nang", "123 NVC", 1000, Guid.NewGuid());
+            var warehouses = new Warehouse("Da Nang", "123 NVC", 1000, It.IsAny<int>());
 
             _unitOfWorkMock.Setup(uow => uow.Warehouses).Returns(_warehouseRepoMock.Object);
             _warehouseRepoMock.Setup(repo => repo.GetByIdAsync(warehouses.Id)).ReturnsAsync(warehouses);
@@ -136,10 +142,10 @@ namespace UnitTest
         {
             // Arrange
             _unitOfWorkMock.Setup(uow => uow.Warehouses).Returns(_warehouseRepoMock.Object);
-            _warehouseRepoMock.Setup(repo => repo.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((Warehouse?)null);
+            _warehouseRepoMock.Setup(repo => repo.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Warehouse?)null);
 
             //Act&&Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _warehouseService.GetByIdAsync(Guid.NewGuid()));
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _warehouseService.GetByIdAsync(It.IsAny<int>()));
         }
         #endregion
 
@@ -190,7 +196,7 @@ namespace UnitTest
                 Name = "Da Nang",
                 Location = "123 NVC",
                 Capacity = 1000,
-                UserId = Guid.NewGuid()
+                UserId = It.IsAny<int>()
             };
             _unitOfWorkMock.Setup(uow => uow.Warehouses).Returns(_warehouseRepoMock.Object);
             _warehouseRepoMock.Setup(repo => repo.ExistsByNameAsync(warehouseDto.Name)).ReturnsAsync(true);
@@ -248,25 +254,25 @@ namespace UnitTest
                 Name = "Da Nang",
                 Location = "456 ABC",
                 Capacity = 2000,
-                UserId = Guid.NewGuid()
+                UserId = It.IsAny<int>()
             };
             _unitOfWorkMock.Setup(uow => uow.Warehouses).Returns(_warehouseRepoMock.Object);
-            _warehouseRepoMock.Setup(repo => repo.GetByIdAsync(Guid.NewGuid())).ReturnsAsync((Warehouse?)null);
+            _warehouseRepoMock.Setup(repo => repo.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((Warehouse?)null);
             // Act & Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _warehouseService.UpdateAsync(Guid.NewGuid(), updateDto));
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await _warehouseService.UpdateAsync(It.IsAny<int>(), updateDto));
         }
 
         [Fact]
         public async Task UpdateWarehouse_ShouldThrowException_WhenWarehouseNameExist()
         {
             // Arrange
-            var warehouse = new Warehouse("Da Nang", "123 NVC", 1000, Guid.NewGuid());
+            var warehouse = new Warehouse("Da Nang", "123 NVC", 1000, It.IsAny<int>());
             var updateDto = new UpdateWarehouseDto
             {
                 Name = "Da Nang",
                 Location = "456 ABC",
                 Capacity = 2000,
-                UserId = Guid.NewGuid()
+                UserId = It.IsAny<int>()
             };
             _unitOfWorkMock.Setup(uow => uow.Warehouses).Returns(_warehouseRepoMock.Object);
             _warehouseRepoMock.Setup(repo => repo.GetByIdAsync(warehouse.Id)).ReturnsAsync(warehouse);

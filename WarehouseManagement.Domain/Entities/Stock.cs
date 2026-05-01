@@ -9,23 +9,23 @@ namespace WarehouseManagement.Domain.Entities
 {
     public class Stock : BaseEntity
     {
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
         public Product Product { get; set; } = null!;
-        public Guid WarehouseId { get; set; }
+        public int WarehouseId { get; set; }
         public Warehouse Warehouse { get; set; } = null!;
         public int QuantityOnHand { get; set; }
         public int ReorderLevel { get; set; }
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
         private Stock() { }
 
-        public Stock(Guid productId, Guid warehouseId, int reorderLevel)
+        public Stock(int productId, int warehouseId, int reorderLevel)
         {
-            if (productId == Guid.Empty)
+            if (productId <= 0)
                 throw new DomainException("Invalid product ID.");
-            if (warehouseId == Guid.Empty)
+            if (warehouseId <= 0)
                 throw new DomainException("Invalid warehouse ID.");
             if (reorderLevel < 0)
-                throw new DomainException("Reorder level cannot be negative."); 
+                throw new DomainException("Reorder level cannot be negative.");
 
             ProductId = productId;
             WarehouseId = warehouseId;

@@ -11,6 +11,6 @@ namespace WarehouseManagement.Application.DTOs.WarehouseTransactions
         public string Status { get; set; } = string.Empty;
         public string ReferenceNumber { get; set; } = string.Empty;
         public string? RejectionReason { get; set; }
-        public Guid? WarehouseId { get; set; }
+        public int? WarehouseId { get; set; }
     }
 }

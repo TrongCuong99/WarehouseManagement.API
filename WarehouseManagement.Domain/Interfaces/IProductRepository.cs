@@ -7,6 +7,6 @@ namespace WarehouseManagement.Domain.Interfaces
         Task<Product?> GetBySKUAsync(string sku);
         Task<bool> ExistsBySKUAsync(string sku);
         Task<IEnumerable<Product>> SearchAsync(string keyword);
-        Task<List<Product>> GetByIdsAsync(IEnumerable<Guid> productIds);
+        Task<List<Product>> GetByIdsAsync(IEnumerable<int> productIds);
     }
 }

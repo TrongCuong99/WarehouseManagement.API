@@ -10,9 +10,9 @@ namespace WarehouseManagement.Application.DTOs.WarehouseTransactions
     public class CreateWarehouseTransactionDto
     {
         public TransactionTypes TransactionType { get; set; }
-        public Guid WarehouseId { get; set; }
+        public int WarehouseId { get; set; }
         public string ReferenceNumber { get; set; } = string.Empty;
-        public Guid CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
         public required string Status { get; set; }
 
         public List<CreateWarehouseTransactionDetailDto> TransactionDetails { get; set; } = [];
@@ -20,7 +20,7 @@ namespace WarehouseManagement.Application.DTOs.WarehouseTransactions
 
     public class CreateWarehouseTransactionDetailDto
     {
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
     }
