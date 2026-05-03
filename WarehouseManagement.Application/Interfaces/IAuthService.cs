@@ -10,5 +10,6 @@ namespace WarehouseManagement.Application.Interfaces
     public interface IAuthService
     {
         Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenRequestDto dto);
+        Task LogoutAsync(int id);
     }
 }

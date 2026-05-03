@@ -39,5 +39,11 @@ namespace WarehouseManagement.Application.Services
                 RefreshToken = newRefreshToken
             };
         }
+
+        public async Task LogoutAsync(int id)
+        {
+            await _unitOfWork.User.DeleteRefreshTokenAsync(id);
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 }

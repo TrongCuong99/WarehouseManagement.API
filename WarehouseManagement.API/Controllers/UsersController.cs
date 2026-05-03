@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WarehouseManagement.Application.Comom;
 using WarehouseManagement.Application.DTOs.Users;
 using WarehouseManagement.Application.Interfaces;
@@ -91,6 +92,21 @@ namespace WarehouseManagement.API.Controllers
         {
             var result = await _authService.RefreshTokenAsync(dto);
             return Ok(result);
+        }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (int.TryParse(userIdClaim, out int userId))
+            {
+                await _authService.LogoutAsync(userId);
+                return Ok(new ApiResponse<string>(200, "Logout successful", null));
+            }
+
+            return BadRequest("User ID Invalid");
         }
     }
 }

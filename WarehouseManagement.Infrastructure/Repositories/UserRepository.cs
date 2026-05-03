@@ -56,5 +56,17 @@ namespace WarehouseManagement.Infrastructure.Repositories
         {
             return await _dbSet.FirstOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task DeleteRefreshTokenAsync(int userId)
+        {
+            var user = await _dbSet.FindAsync(userId);
+
+            if (user != null)
+            {
+                user.RefreshToken = null;
+                user.RefreshTokenExpiresAt = null;
+                _dbSet.Update(user);
+            }
+        }
     }
 }

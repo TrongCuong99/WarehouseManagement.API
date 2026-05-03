@@ -11,5 +11,6 @@ namespace WarehouseManagement.Domain.Interfaces
         Task<IEnumerable<WarehouseTransaction>> GetApprovedTransactionsAsync(int userId);
         Task<bool> HasApprovedTransactionsAsync(int userId);
         Task<User?> GetUserByEmailAsync(string email);
+        Task DeleteRefreshTokenAsync(int userId);
     }
 }
